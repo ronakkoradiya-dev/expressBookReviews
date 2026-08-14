@@ -46,6 +46,23 @@ public_users.get("/", function (req, res) {
   return res.status(200).json(books);
 });
 
+// Get book details based on ISBN using Axios with async-await
+public_users.get("/axios/isbn/:isbn", async function (req, res) {
+  const isbn = req.params.isbn;
+  try {
+    // Fetching from your own server's ISBN endpoint
+    const response = await axios.get(`http://localhost:5000/isbn/${isbn}`);
+    return res.status(200).json(response.data);
+  } catch (error) {
+    if (error.response) {
+      return res.status(error.response.status).json(error.response.data);
+    }
+    return res
+      .status(500)
+      .json({ message: "Error fetching book by ISBN", error: error.message });
+  }
+});
+
 // Get book details based on ISBN
 public_users.get("/isbn/:isbn", function (req, res) {
   const isbn = req.params.isbn;
