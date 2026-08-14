@@ -75,6 +75,25 @@ public_users.get("/isbn/:isbn", function (req, res) {
   }
 });
 
+// Get book details based on Author using Axios with async-await
+public_users.get("/axios/author/:author", async function (req, res) {
+  const author = req.params.author;
+  try {
+    const response = await axios.get(`http://localhost:5000/author/${author}`);
+    return res.status(200).json(response.data);
+  } catch (error) {
+    if (error.response) {
+      return res.status(error.response.status).json(error.response.data);
+    }
+    return res
+      .status(500)
+      .json({
+        message: "Error fetching books by author",
+        error: error.message,
+      });
+  }
+});
+
 // Get book details based on author
 public_users.get("/author/:author", function (req, res) {
   const authorName = req.params.author;
